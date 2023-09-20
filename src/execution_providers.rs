@@ -24,7 +24,7 @@ extern "C" {
 	#[cfg(feature = "coreml")]
 	pub(crate) fn OrtSessionOptionsAppendExecutionProvider_CoreML(options: *mut sys::OrtSessionOptions, flags: u32) -> sys::OrtStatusPtr;
 	#[cfg(feature = "directml")]
-	pub(crate) fn OrtSessionOptionsAppendExecutionProvider_DML(options: *mut sys::OrtSessionOptions, device_id: std::os::raw::c_int) -> sys::OrtStatusPtr;
+	pub(crate) fn OrtSessionOptionsAppendExecutionProviderEx_DML(options: *mut sys::OrtSessionOptions, device_id: std::os::raw::c_int) -> sys::OrtStatusPtr;
 	#[cfg(feature = "nnapi")]
 	pub(crate) fn OrtSessionOptionsAppendExecutionProvider_Nnapi(options: *mut sys::OrtSessionOptions, flags: u32) -> sys::OrtStatusPtr;
 	#[cfg(feature = "tvm")]
@@ -663,8 +663,8 @@ impl ExecutionProvider {
 			}
 			#[cfg(any(feature = "load-dynamic", feature = "directml"))]
 			&Self::DirectML(options) => {
-				get_ep_register!(OrtSessionOptionsAppendExecutionProvider_DML(options: *mut sys::OrtSessionOptions, device_id: std::os::raw::c_int) -> sys::OrtStatusPtr);
-				status_to_result(unsafe { OrtSessionOptionsAppendExecutionProvider_DML(session_options, options.device_id as _) })
+				get_ep_register!(OrtSessionOptionsAppendExecutionProviderEx_DML(options: *mut sys::OrtSessionOptions, device_id: std::os::raw::c_int) -> sys::OrtStatusPtr);
+				status_to_result(unsafe { OrtSessionOptionsAppendExecutionProviderEx_DML(session_options, options.device_id as _) })
 					.map_err(OrtError::ExecutionProvider)?;
 			}
 			#[cfg(any(feature = "load-dynamic", feature = "rocm"))]
